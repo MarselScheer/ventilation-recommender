@@ -32,4 +32,5 @@ venv:
 run-app: venv ~/.streamlit
 	@echo ----- $@ ----- $$(date)
 	source venv/bin/activate
+	source PUSHBULLET_TOKEN
 	streamlit run src/app.py
