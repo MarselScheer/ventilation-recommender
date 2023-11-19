@@ -2,6 +2,19 @@ SHELL := /bin/bash
 .ONESHELL:
 REPO_NAME := $(shell basename $$PWD)
 
+app-build:
+	@echo ----- $@ ----- $$(date)
+	-rm -rf docker_context
+	mkdir docker_context
+	cp iac/app/* docker_context
+	cp Makefile docker_context
+	cp PUSHBULLET_TOKEN docker_context
+	cp -r src docker_context
+	cp -r .streamlit docker_context
+	sudo docker build \
+	  -t $(REPO_NAME):latest \
+	  docker_context
+
 ide-build:
 	@echo ----- $@ ----- $$(date)
 	-rm -rf docker_context
