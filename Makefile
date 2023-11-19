@@ -29,8 +29,14 @@ venv:
 	@echo ----- $@ ----- $$(date)
 	cp -r .streamlit ~
 
-run-app: venv ~/.streamlit
+run-app: ~/.streamlit
+	@echo ----- $@ ----- $$(date)
+	source PUSHBULLET_TOKEN
+	#streamlit run src/app.py &
+	python src/measure.py
+
+run-app-in-dev-mode: venv ~/.streamlit
 	@echo ----- $@ ----- $$(date)
 	source venv/bin/activate
-	source PUSHBULLET_TOKEN
-	streamlit run src/app.py
+	export DEVELOPMENT=True
+	make run-app
