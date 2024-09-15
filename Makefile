@@ -21,10 +21,6 @@ start-docker-ide:
 	  --name $(IDE_CONTAINER) \
 	  $(REPO_NAME)-ide:latest
 
-stop-docker-ide:
-	@echo -------------------- $@ $$(date) --------------------
-	sudo docker stop $(IDE_CONTAINER)
-
 app-build:
 	@echo -------------------- $@ $$(date) --------------------
 	-rm -rf docker_context

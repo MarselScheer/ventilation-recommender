@@ -90,24 +90,28 @@ class Alert:
             self.last_alert = datetime.now()
 
 
-sender = NotificationDummy() if is_development() else Notification()
-alert_system = Alert(sender=sender)
-sensor = SensorDummy() if is_development() else Sensor()
-WAIT = 1 if is_development() else 60
-measurements = []
-
-
 def write_meas(m):
     with open("data/meas.jsonl", "a") as fh:
         json.dump(m, fh)
         fh.write("\n")
 
 
-while True:
-    # pd.DataFrame(measurements).to_json("data/meas.jsonl", lines=True, orient="records")
-    meas = sensor.get_measurements()
-    measurements.append(meas)
-    write_meas(m=meas)
-    alert_system.check(value=meas["humidity"])
+def main():
+    sender = NotificationDummy() if is_development() else Notification()
+    alert_system = Alert(sender=sender)
+    sensor = SensorDummy() if is_development() else Sensor()
+    WAIT = 1 if is_development() else 60
+    measurements = []
 
-    time.sleep(WAIT)
+    while True:
+        # pd.DataFrame(measurements).to_json("data/meas.jsonl", lines=True, orient="records")
+        meas = sensor.get_measurements()
+        measurements.append(meas)
+        write_meas(m=meas)
+        alert_system.check(value=meas["humidity"])
+
+        time.sleep(WAIT)
+
+
+if __name__ == "__main__":
+    main()

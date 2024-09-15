@@ -8,7 +8,7 @@ RPi monitors humidity and recommends ventilation via pushbullet
 
 * Development
 
-- `make build/start/stop-docker-ide`
+- `make build/start-docker-ide`. no stop needed stops when leaving the container
 
 * iac
 - §§iac;;f: docker container for development build and started via make targets
@@ -21,10 +21,11 @@ RPi monitors humidity and recommends ventilation via pushbullet
 ** shortcomings
 - §§dashboard;;s||D==4__0: Overview of the all measurements over time
 * core logic
+- §§core;;f: Within development fake sensor and pushbulletk
 ** shortcomings
-- §§core;;s||D==2__0: no main function
+- §§core;;s||D==2__0: no logging
 - §§core;;s||D==2__0: script needs arguments for humidity threshold and time between two notifications
 * documentation
 ** shortcomings
-- §§docu;;s||E==4__0: nearly no documentation
+- §§docu;;s||E==3__0: nearly no documentation
 
