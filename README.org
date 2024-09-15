@@ -2,9 +2,20 @@
 
 RPi monitors humidity and recommends ventilation via pushbullet
 
+* RPi
+
+- OS: Raspbian GNU/Linux 12 (bookworm)
+
+* Development
+
+- `make build/start/stop-docker-ide`
+
 * iac
+- §§iac;;f: docker container for development build and started via make targets
+
 ** shortcomings
 - §§iac;;s||E==2__0: token baked into docker image
+- §§iac;;s||C==2__0: have docker folder instead of iac and maybe also use docker compose
 - §§iac;;s||D==2__0: systemd service file is not part of the repo
 * dashboard
 ** shortcomings
