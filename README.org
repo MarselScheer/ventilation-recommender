@@ -1,0 +1,19 @@
+* ventilation-recommender
+
+RPi monitors humidity and recommends ventilation via pushbullet
+
+* iac
+** shortcomings
+- §§iac;;s||E==2__0: token baked into docker image
+- §§iac;;s||D==2__0: systemd service file is not part of the repo
+* dashboard
+** shortcomings
+- §§dashboard;;s||D==4__0: Overview of the all measurements over time
+* core logic
+** shortcomings
+- §§core;;s||D==2__0: no main function
+- §§core;;s||D==2__0: script needs arguments for humidity threshold and time between two notifications
+* documentation
+** shortcomings
+- §§docu;;s||E==4__0: nearly no documentation
+

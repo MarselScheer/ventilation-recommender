@@ -53,3 +53,7 @@ run-app-in-dev-mode: venv ~/.streamlit
 	source venv/bin/activate
 	export DEVELOPMENT=True
 	make run-app
+
+list-shortcomings:
+	@echo -------------------- $@ $$(date) --------------------
+	fgrep ";;s" README.org | sort -r
