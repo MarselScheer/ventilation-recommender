@@ -54,6 +54,7 @@ run-app-in-dev-mode: venv ~/.streamlit
 	@echo -------------------- $@ $$(date) --------------------
 	source venv/bin/activate
 	export DEVELOPMENT=True
+	rm /tmp/monitor.log
 	make run-app
 
 list-shortcomings:

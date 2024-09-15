@@ -6,12 +6,21 @@ import json
 from datetime import datetime
 import time
 
+import logging
+
+logger = logging.getLogger("monitor")
+# log to monitor.log and stdout
+logging.basicConfig(filename="/tmp/monitor.log", level=logging.INFO)
+
 
 def is_development():
     return os.getenv("DEVELOPMENT") is not None
 
 
 class Notification:
+    def __init__(self) -> None:
+        logger.info("Init Notification")
+
     def send(self, title: str, body: str):
         # https://gist.github.com/mixsoda/4d7eebdf767432f95f4b66ac19f7e310
         token = os.environ["PUSHBULLET_TOKEN"]
@@ -27,12 +36,16 @@ class Notification:
 
 
 class NotificationDummy:
+    def __init__(self) -> None:
+        logger.info("Init NotificationDummy")
+
     def send(self, title: str, body: str):
         print(title, body)
 
 
 class Sensor:
     def __init__(self) -> None:
+        logger.info("Init Sensor")
         import Adafruit_DHT
 
         self.sensor = Adafruit_DHT.DHT22
@@ -57,6 +70,9 @@ class Sensor:
 
 
 class SensorDummy:
+    def __init__(self) -> None:
+        logger.info("Init SensorDummy")
+
     def get_measurements(self) -> dict:
         from random import randrange
 
@@ -69,6 +85,7 @@ class SensorDummy:
 
 class Alert:
     def __init__(self, sender: Notification) -> None:
+        logger.info("Init Alert")
         self.threshold = 70
         self.min_elapsed_time = 1 if is_development() else 30 * 60
         self.sender = sender
@@ -77,6 +94,7 @@ class Alert:
             body=f"Threshold = {self.threshold}\n{datetime.now()}",
         )
         self.last_alert = datetime.now()
+        logger.info(f"{self.threshold=}, {self.min_elapsed_time=}, {self.sender=}")
 
     def check(self, value: float) -> None:
         hour = int(datetime.now().strftime("%H"))

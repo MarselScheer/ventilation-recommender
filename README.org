@@ -12,7 +12,6 @@ RPi monitors humidity and recommends ventilation via pushbullet
 
 * iac
 - §§iac;;f: docker container for development build and started via make targets
-
 ** shortcomings
 - §§iac;;s||E==2__0: token baked into docker image
 - §§iac;;s||C==2__0: have docker folder instead of iac and maybe also use docker compose
@@ -22,10 +21,12 @@ RPi monitors humidity and recommends ventilation via pushbullet
 - §§dashboard;;s||D==4__0: Overview of the all measurements over time
 * core logic
 - §§core;;f: Within development fake sensor and pushbulletk
+- §§core;;f: Log to /tmp/monitor.log in the docker container
 ** shortcomings
-- §§core;;s||D==2__0: no logging
+- §§core;;s||C==2__0: logs accessible outside docker container
 - §§core;;s||D==2__0: script needs arguments for humidity threshold and time between two notifications
 * documentation
 ** shortcomings
-- §§docu;;s||E==3__0: nearly no documentation
+- §§docu;;s||E==3__0: document how to deploy to RPi
+- §§docu;;s||D==3__0: docstrings
 
