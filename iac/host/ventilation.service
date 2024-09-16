@@ -1,0 +1,10 @@
+[Unit]
+Description=Start ventilation recommender
+
+[Service]
+Type=simple
+EnvironmentFile=/home/m/repos/ventilation-recommender/PUSHBULLET_TOKEN
+ExecStart=docker run --privileged --rm -e PUSHBULLET_TOKEN=${PUSHBULLET_TOKEN} ventilation-recommender:latest
+
+[Install]
+WantedBy=multi-user.target

@@ -3,6 +3,8 @@ SHELL := /bin/bash
 REPO_NAME := $(shell basename $$PWD)
 IDE_CONTAINER := ventilation-ide
 
+-include .env
+
 build-docker-ide:
 	@echo -------------------- $@ $$(date) --------------------
 	-rm -rf docker_context
@@ -27,7 +29,6 @@ app-build:
 	mkdir docker_context
 	cp iac/app/* docker_context
 	cp Makefile docker_context
-	cp PUSHBULLET_TOKEN docker_context
 	cp -r src docker_context
 	cp -r .streamlit docker_context
 	sudo docker build \
@@ -46,7 +47,6 @@ venv:
 
 run-app: ~/.streamlit
 	@echo -------------------- $@ $$(date) --------------------
-	source PUSHBULLET_TOKEN
 	#streamlit run src/app.py &
 	python src/measure.py
 
@@ -54,9 +54,10 @@ run-app-in-dev-mode: venv ~/.streamlit
 	@echo -------------------- $@ $$(date) --------------------
 	source venv/bin/activate
 	export DEVELOPMENT=True
+	export PUSHBULLET_TOKEN=$(PUSHBULLET_TOKEN)
 	rm /tmp/monitor.log
 	make run-app
 
 list-shortcomings:
 	@echo -------------------- $@ $$(date) --------------------
-	fgrep ";;s" README.org | sort -r
+	fgrep ";;s" README.org | sort -r | fgrep "||$(rate)"
