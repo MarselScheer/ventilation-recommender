@@ -1,3 +1,2 @@
-streamlit==1.28.2
 requests==2.31.0
 Adafruit_Python_DHT==1.4.0

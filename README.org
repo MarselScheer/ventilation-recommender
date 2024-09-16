@@ -12,10 +12,10 @@ RPi monitors humidity and recommends ventilation via pushbullet
 
 * iac
 - §§iac;;f: docker container for development build and started via make targets
+- §§iac;;f: token passed to docker container via environment variable
+- §§iac;;f: systemd service uses environment file to start docker container with necessary token
 ** shortcomings
-- §§iac;;s||E==2__0: token baked into docker image
 - §§iac;;s||C==2__0: have docker folder instead of iac and maybe also use docker compose
-- §§iac;;s||D==2__0: systemd service file is not part of the repo
 * dashboard
 ** shortcomings
 - §§dashboard;;s||D==4__0: Overview of the all measurements over time
