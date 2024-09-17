@@ -10,9 +10,9 @@ RPi monitors humidity and recommends ventilation via pushbullet
 
 - `make build/start-docker-ide`. no stop needed stops when leaving the container
 
-* Deployment
+* Deployment measurement
 
-1. clone the repo
+1. mkdir repos && cd repos && git clone https://github.com/MarselScheer/ventilation-recommender.git
 2. cp PUSHBULLET_TOKEN-template PUSHBULLET_TOKEN
 3. add the token to PUSHBULLET_TOKEN
 4. cp iac/host/ventilation.service /etc/systemd/system/
@@ -21,6 +21,7 @@ RPi monitors humidity and recommends ventilation via pushbullet
 7. make app-build
 8. systemctl start ventilation.service
 9. a pushbullet message should appear informing about the threshold used for sending an alarm
+
 
 * iac
 - §§iac;;f: docker container for development build and started via make targets

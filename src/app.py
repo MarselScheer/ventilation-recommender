@@ -1,22 +1,8 @@
-import os
-import requests
-import json
-import streamlit as st
-import pandas as pd
+from shiny.express import render, input, ui
+
+ui.input_slider("val", "Slider label", min=0, max=100, value=50)
 
 
-def push_message(title, body):
-    # https://gist.github.com/mixsoda/4d7eebdf767432f95f4b66ac19f7e310
-    token = os.environ["PUSHBULLET_TOKEN"]
-    url = "https://api.pushbullet.com/v2/pushes"
-
-    headers = {"content-type": "application/json", "Authorization": "Bearer " + token}
-    data_send = {"type": "note", "title": title, "body": body}
-
-    requests.post(url, headers=headers, data=json.dumps(data_send))
-
-
-st.dataframe(pd.read_json("data/meas.jsonl", lines=True))
-
-if st.button("Send Msg"):
-    push_message(title="vent", body="test")
+@render.text
+def slider_val():
+    return f"Slider value: {input.val()}"

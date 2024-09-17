@@ -20,9 +20,27 @@ start-docker-ide:
 	  -v ~/docker_fs:/tmp/hostfs \
 	  -v /home/m/docker_fs/dots/.ssh:/home/m/.ssh \
 	  -v /tmp/.X11-unix:/tmp/.X11-unix \
-	  -p 8501:8501 \
 	  --name $(IDE_CONTAINER) \
 	  $(REPO_NAME)-ide:latest
+
+build-dashboard:
+	@echo -------------------- $@ $$(date) --------------------
+	-rm -rf docker_context
+	mkdir -p docker_context/src
+	cp iac/dashboard/* docker_context
+	cp Makefile docker_context
+	cp src/app.py docker_context/src/
+	sudo docker build \
+	  -t $(REPO_NAME)-dashboard:latest \
+	  docker_context
+
+start-dashboard:
+	@echo -------------------- $@ $$(date) --------------------
+	sudo docker run \
+	  --rm \
+	  -d \
+	  -p 8000:8000 \
+	  $(REPO_NAME)-dashboard:latest
 
 app-build:
 	@echo -------------------- $@ $$(date) --------------------
