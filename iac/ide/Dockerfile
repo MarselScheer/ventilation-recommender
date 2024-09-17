@@ -25,7 +25,7 @@ RUN curl https://pyenv.run | bash \
     && echo 'eval "$(pyenv init -)"' >> ~/.profile \
     && mkdir -p /tmp/hostfs \
     && ln -s /tmp/hostfs \
-    && ln -s /tmp/hostfs/.emacs.d \
+    && ln -s /tmp/hostfs/dots/.emacs.d.lean .emacs.d \
     && ln -s /tmp/hostfs/.gitconfig \
     && ln -s /tmp/hostfs/.ssh
 

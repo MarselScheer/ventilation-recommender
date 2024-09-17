@@ -1,0 +1,44 @@
+* ventilation-recommender
+
+RPi monitors humidity and recommends ventilation via pushbullet
+
+* RPi
+
+- OS: Raspbian GNU/Linux 12 (bookworm)
+
+* Development
+
+- `make build/start-docker-ide`. no stop needed stops when leaving the container
+
+* Deployment
+
+1. clone the repo
+2. cp PUSHBULLET_TOKEN-template PUSHBULLET_TOKEN
+3. add the token to PUSHBULLET_TOKEN
+4. cp iac/host/ventilation.service /etc/systemd/system/
+5. maybe update "EnvironmentFile" field in /etc/systemd/system/ventilation.service to point the file with the token
+6. systemctl enable ventilation.service
+7. make app-build
+8. systemctl start ventilation.service
+9. a pushbullet message should appear informing about the threshold used for sending an alarm
+
+* iac
+- §§iac;;f: docker container for development build and started via make targets
+- §§iac;;f: token passed to docker container via environment variable
+- §§iac;;f: systemd service uses environment file to start docker container with necessary token
+** shortcomings
+- §§iac;;s||C==2__0: have docker folder instead of iac and maybe also use docker compose
+- §§iac;;s||B==3__0: make targets to deploy app
+* dashboard
+** shortcomings
+- §§dashboard;;s||D==4__0: Overview of the all measurements over time
+* core logic
+- §§core;;f: Within development fake sensor and pushbulletk
+- §§core;;f: Log to /tmp/monitor.log in the docker container
+** shortcomings
+- §§core;;s||C==2__0: logs accessible outside docker container
+- §§core;;s||D==2__0: script needs arguments for humidity threshold and time between two notifications
+* documentation
+** shortcomings
+- §§docu;;s||D==3__0: docstrings
+

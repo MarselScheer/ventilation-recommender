@@ -2,6 +2,7 @@ import os
 import requests
 import json
 import streamlit as st
+import pandas as pd
 
 
 def push_message(title, body):
@@ -15,7 +16,7 @@ def push_message(title, body):
     requests.post(url, headers=headers, data=json.dumps(data_send))
 
 
-st.write("Hello World")
+st.dataframe(pd.read_json("data/meas.jsonl", lines=True))
 
 if st.button("Send Msg"):
     push_message(title="vent", body="test")

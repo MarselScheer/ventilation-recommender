@@ -1,0 +1,2 @@
+requests==2.31.0
+Adafruit_Python_DHT==1.4.0
