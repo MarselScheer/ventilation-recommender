@@ -29,6 +29,7 @@ RPi monitors humidity and recommends ventilation via pushbullet
 ** shortcomings
 - §§iac;;s||C==2__0: have docker folder instead of iac and maybe also use docker compose
 - §§iac;;s||B==3__0: make targets to deploy app
+- §§iac;;s||C==1__0: ide should have user ide instead of docker (unifies it with other docker images; also adapt mounts during start)
 * dashboard
 ** shortcomings
 - §§dashboard;;s||D==4__0: Overview of the all measurements over time

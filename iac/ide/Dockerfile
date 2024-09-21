@@ -27,7 +27,6 @@ RUN curl https://pyenv.run | bash \
     && ln -s /tmp/hostfs \
     && ln -s /tmp/hostfs/dots/.emacs.d.lean .emacs.d \
     && ln -s /tmp/hostfs/.gitconfig \
-    && ln -s /tmp/hostfs/.ssh
 
 RUN ~/.pyenv/bin/pyenv install ${PYTHON_VERSION} \
     && ~/.pyenv/bin/pyenv global ${PYTHON_VERSION}

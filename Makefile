@@ -18,6 +18,7 @@ start-docker-ide:
 	@echo -------------------- $@ $$(date) --------------------
 	sudo docker run -i -t --rm \
 	  -v ~/docker_fs:/tmp/hostfs \
+	  -v /home/m/docker_fs/dots/.ssh:/home/m/.ssh \
 	  -v /tmp/.X11-unix:/tmp/.X11-unix \
 	  -p 8501:8501 \
 	  --name $(IDE_CONTAINER) \
