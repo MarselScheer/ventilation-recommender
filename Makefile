@@ -20,6 +20,7 @@ start-docker-ide:
 	  -v ~/docker_fs:/tmp/hostfs \
 	  -v /home/m/docker_fs/dots/.ssh:/home/m/.ssh \
 	  -v /tmp/.X11-unix:/tmp/.X11-unix \
+	  -p 8000:8000 \
 	  --name $(IDE_CONTAINER) \
 	  $(REPO_NAME)-ide:latest
 
@@ -39,6 +40,7 @@ start-dashboard:
 	sudo docker run \
 	  --rm \
 	  -d \
+	  -v /data:/data \
 	  -p 8000:8000 \
 	  $(REPO_NAME)-dashboard:latest
 
@@ -58,18 +60,13 @@ venv:
 	@echo -------------------- $@ $$(date) --------------------
 	python -m venv venv
 	source venv/bin/activate
-	pip install streamlit==1.28.2
+	pip install shiny==1.1.0 matplotlib==3.2.9
 
-~/.streamlit:
+run-dashboard-in-dev-mode: venv
 	@echo -------------------- $@ $$(date) --------------------
-	cp -r .streamlit ~
+	shiny run src/app.py --host 0.0.0.0 --port 8000 --reload
 
-run-app: ~/.streamlit
-	@echo -------------------- $@ $$(date) --------------------
-	#streamlit run src/app.py &
-	python src/measure.py
-
-run-app-in-dev-mode: venv ~/.streamlit
+run-app-in-dev-mode: venv
 	@echo -------------------- $@ $$(date) --------------------
 	source venv/bin/activate
 	export DEVELOPMENT=True
