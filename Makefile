@@ -24,16 +24,6 @@ start-docker-ide:
 	  --name $(IDE_CONTAINER) \
 	  $(REPO_NAME)-ide:latest
 
-build-dashboard:
-	@echo -------------------- $@ $$(date) --------------------
-	-rm -rf docker_context
-	mkdir -p docker_context/src
-	cp iac/dashboard/* docker_context
-	cp Makefile docker_context
-	cp src/app.py docker_context/src/
-	sudo docker build \
-	  -t $(REPO_NAME)-dashboard:latest \
-	  docker_context
 
 start-dashboard:
 	@echo -------------------- $@ $$(date) --------------------
@@ -42,7 +32,7 @@ start-dashboard:
 	  -d \
 	  -v /data:/data \
 	  -p 8000:8000 \
-	  $(REPO_NAME)-dashboard:latest
+	  marselscheer/ventilation-dashboard:20240926
 
 app-build:
 	@echo -------------------- $@ $$(date) --------------------
@@ -64,6 +54,7 @@ venv:
 
 run-dashboard-in-dev-mode: venv
 	@echo -------------------- $@ $$(date) --------------------
+	source venv/bin/activate
 	shiny run src/app.py --host 0.0.0.0 --port 8000 --reload
 
 run-app-in-dev-mode: venv

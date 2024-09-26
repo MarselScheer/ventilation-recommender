@@ -2,9 +2,11 @@ name: Build and push to arm dashboard image to dockerhub
 
 on:
   push:
-    branches: [ "main" , "feature/dashboard" ]
+    branches: [ "main" ]
+    paths: [ "iac/dashboard/**", ".github/workflows/**" ]
   pull_request:
     branches: [ "main" ]
+    paths: [ "iac/dashboard/**", ".github/workflows/**" ]
 
 env:
   IMAGE: marselscheer/ventilation-dashboard
@@ -41,6 +43,14 @@ jobs:
         with:
           platforms: linux/arm/v7
           context: ./docker_context
-          # push: false
+          push: false
+          tags: ${{ env.IMAGE }}:${{ env.RELEASE_DATE }}
+        if: github.event_name == 'pull_request'
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/arm/v7
+          context: ./docker_context
           push: true
           tags: ${{ env.IMAGE }}:${{ env.RELEASE_DATE }}
+        if: github.event_name != 'pull_request'
