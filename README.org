@@ -8,11 +8,15 @@ RPi monitors humidity and recommends ventilation via pushbullet
 
 * Development
 
+** Measurement
 - `make build/start-docker-ide`. no stop needed stops when leaving the container
 
-* Deployment
+** Dashboard
+- `make run-dashboard-in-dev-mode` this starts the dashboard directly (not in a docker container). On host visit 127.0.0.1:8000
 
-1. clone the repo
+* Deployment measurement
+
+1. mkdir repos && cd repos && git clone https://github.com/MarselScheer/ventilation-recommender.git
 2. cp PUSHBULLET_TOKEN-template PUSHBULLET_TOKEN
 3. add the token to PUSHBULLET_TOKEN
 4. cp iac/host/ventilation.service /etc/systemd/system/
@@ -22,16 +26,23 @@ RPi monitors humidity and recommends ventilation via pushbullet
 8. systemctl start ventilation.service
 9. a pushbullet message should appear informing about the threshold used for sending an alarm
 
+
 * iac
 - §§iac;;f: docker container for development build and started via make targets
 - §§iac;;f: token passed to docker container via environment variable
+- §§iac;;f: data stored on host and mounted into docker-container for mearsurement and dashboard
 - §§iac;;f: systemd service uses environment file to start docker container with necessary token
+- §§iac;;f: docker image for dashboard is build via ci-pipeline on github (because it must be build for arm architecture)
+
 ** shortcomings
 - §§iac;;s||C==2__0: have docker folder instead of iac and maybe also use docker compose
 - §§iac;;s||B==3__0: make targets to deploy app
+- §§iac;;s||C==1__0: ide should have user ide instead of docker (unifies it with other docker images; also adapt mounts during start)
+- §§iac;;s||C==3__0: PR take ages because building the dashboard image is super slow (a shiny_arm base image might be helpful)
 * dashboard
+- §§dashboard;;f: shows humidity and temperature in one plot with 2 y-axes
 ** shortcomings
-- §§dashboard;;s||D==4__0: Overview of the all measurements over time
+- None
 * core logic
 - §§core;;f: Within development fake sensor and pushbulletk
 - §§core;;f: Log to /tmp/monitor.log in the docker container

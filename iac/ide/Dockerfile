@@ -26,8 +26,7 @@ RUN curl https://pyenv.run | bash \
     && mkdir -p /tmp/hostfs \
     && ln -s /tmp/hostfs \
     && ln -s /tmp/hostfs/dots/.emacs.d.lean .emacs.d \
-    && ln -s /tmp/hostfs/.gitconfig \
-    && ln -s /tmp/hostfs/.ssh
+    && ln -s /tmp/hostfs/.gitconfig 
 
 RUN ~/.pyenv/bin/pyenv install ${PYTHON_VERSION} \
     && ~/.pyenv/bin/pyenv global ${PYTHON_VERSION}
@@ -35,4 +34,5 @@ RUN ~/.pyenv/bin/pyenv install ${PYTHON_VERSION} \
 RUN ~/.pyenv/shims/pip install black \
     && curl -sSL https://install.python-poetry.org | ~/.pyenv/shims/python3 -
 
+EXPOSE 8000
 CMD /bin/bash

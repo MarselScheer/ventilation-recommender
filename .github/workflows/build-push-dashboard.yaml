@@ -1,0 +1,56 @@
+name: Build and push to arm dashboard image to dockerhub
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: [ "iac/dashboard/**", ".github/workflows/**" ]
+  pull_request:
+    branches: [ "main" ]
+    paths: [ "iac/dashboard/**", ".github/workflows/**" ]
+
+env:
+  IMAGE: marselscheer/ventilation-dashboard
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build context
+        run: |
+          mkdir -p docker_context/src
+          cp iac/dashboard/* docker_context
+          cp src/app.py docker_context/src/
+      - name: set release date
+        run: |
+          echo "RELEASE_DATE=$(date +%Y%m%d)" >> ${GITHUB_ENV}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Pull-request only build image
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/arm/v7
+          context: ./docker_context
+          push: false
+          tags: ${{ env.IMAGE }}:${{ env.RELEASE_DATE }}
+        if: github.event_name == 'pull_request'
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/arm/v7
+          context: ./docker_context
+          push: true
+          tags: ${{ env.IMAGE }}:${{ env.RELEASE_DATE }}
+        if: github.event_name != 'pull_request'
