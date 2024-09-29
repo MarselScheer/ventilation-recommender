@@ -3,6 +3,11 @@ from shiny.express import render, input, ui
 
 
 def load_data() -> list:
+    """
+    Load data from `data/meas.jsonl`
+
+    :return: list of dicts with fields tiemstamp, humidity, temperature
+    """
     rtn = []
     with open("data/meas.jsonl", "r") as f:
         for line in f:
@@ -12,6 +17,9 @@ def load_data() -> list:
 
 @render.plot
 def humidity_plot():
+    """
+    Creates a plot of humidity and temperature over time (last 30 minutes)
+    """
     from datetime import datetime
     from matplotlib import pyplot as plt
 
