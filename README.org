@@ -41,15 +41,15 @@ RPi monitors humidity and recommends ventilation via pushbullet
 - §§iac;;s||C==3__0: PR take ages because building the dashboard image is super slow (a shiny_arm base image might be helpful)
 * dashboard
 - §§dashboard;;f: shows humidity and temperature in one plot with 2 y-axes
+- §§dashboard;;f: loads data from /data folder on the host system mounted to /data
 ** shortcomings
 - None
 * core logic
-- §§core;;f: Within development fake sensor and pushbulletk
+- §§core;;f: Within development fake sensor and pushbullet
+- §§core;;f: Sends pushbullet message when threshold is exceeded but only between 8 and 22 o'clock and if the last notification is was at least 30 before
+- §§core;;f: writes measurements to /data folder on the host system mounted to /data
 - §§core;;f: Log to /tmp/monitor.log in the docker container
 ** shortcomings
-- §§core;;s||C==2__0: logs accessible outside docker container
+- §§core;;s||B==2__0: logs accessible outside docker container
 - §§core;;s||D==2__0: script needs arguments for humidity threshold and time between two notifications
-* documentation
-** shortcomings
-- §§docu;;s||D==3__0: docstrings
 
