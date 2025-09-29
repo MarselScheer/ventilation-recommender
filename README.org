@@ -25,6 +25,10 @@ RPi monitors humidity and recommends ventilation via pushbullet
 7. make app-build
 8. systemctl start ventilation.service
 9. a pushbullet message should appear informing about the threshold used for sending an alarm
+10. cp iac/host/ventilation_dashboard.service /etc/systemd/system/
+11. maybe update the version of the docker image in the service file
+12. systemctl enable ventilation_dashboard.service
+13. systemctl start ventilation_dashboard.service
 
 
 * iac
@@ -35,7 +39,6 @@ RPi monitors humidity and recommends ventilation via pushbullet
 - §§iac;;f: docker image for dashboard is build via ci-pipeline on github (because it must be build for arm architecture)
 
 ** shortcomings
-- §§iac;;s||D==2__0: As long as we dont have docker compose we should have a dedicated systemd-service that also starts the dashboard. Otherwise, it is not super clear beginning of winter on how to get the system in a state so that it can just be used
 - §§iac;;s||C==2__0: have docker folder instead of iac and maybe also use docker compose
 - §§iac;;s||B==3__0: make targets to deploy app
 - §§iac;;s||C==1__0: ide should have user ide instead of docker (unifies it with other docker images; also adapt mounts during start)
@@ -51,8 +54,8 @@ RPi monitors humidity and recommends ventilation via pushbullet
 - §§core;;f: Sends pushbullet message when threshold is exceeded but only between 8 and 22 o'clock and if the last notification is was at least 30 before
 - §§core;;f: writes measurements to /data folder on the host system mounted to /data
 - §§core;;f: Log to /tmp/monitor.log in the docker container
+- §§core;;f: Each day at around 20:00 a pushbullet is send to check that the system still operating and notifications can be send
 ** shortcomings
 - §§core;;s||B==2__0: logs accessible outside docker container
 - §§core;;s||D==2__0: script needs arguments for humidity threshold and time between two notifications
-- §§core;;s||D==2__0: pushbullet msg once a day to see that the monitor is still running
 
