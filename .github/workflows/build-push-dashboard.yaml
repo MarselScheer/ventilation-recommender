@@ -3,10 +3,10 @@ name: Build and push to arm dashboard image to dockerhub
 on:
   push:
     branches: [ "main" ]
-    paths: [ "iac/dashboard/**", ".github/workflows/**" ]
+    paths: [ "iac/dashboard/**", "src/app.py", ".github/workflows/**" ]
   pull_request:
     branches: [ "main" ]
-    paths: [ "iac/dashboard/**", ".github/workflows/**" ]
+    paths: [ "iac/dashboard/**", "src/app.py", ".github/workflows/**" ]
 
 env:
   IMAGE: marselscheer/ventilation-dashboard

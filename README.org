@@ -9,7 +9,7 @@ RPi monitors humidity and recommends ventilation via pushbullet
 * Development
 
 ** Measurement
-- `make build/start-docker-ide`. no stop needed stops when leaving the container
+- `make build/start-docker-ide`. no stop-docker needed. stops when leaving the container
 
 ** Dashboard
 - `make run-dashboard-in-dev-mode` this starts the dashboard directly (not in a docker container). On host visit 127.0.0.1:8000
@@ -35,21 +35,24 @@ RPi monitors humidity and recommends ventilation via pushbullet
 - §§iac;;f: docker image for dashboard is build via ci-pipeline on github (because it must be build for arm architecture)
 
 ** shortcomings
+- §§iac;;s||D==2__0: As long as we dont have docker compose we should have a dedicated systemd-service that also starts the dashboard. Otherwise, it is not super clear beginning of winter on how to get the system in a state so that it can just be used
 - §§iac;;s||C==2__0: have docker folder instead of iac and maybe also use docker compose
 - §§iac;;s||B==3__0: make targets to deploy app
 - §§iac;;s||C==1__0: ide should have user ide instead of docker (unifies it with other docker images; also adapt mounts during start)
 - §§iac;;s||C==3__0: PR take ages because building the dashboard image is super slow (a shiny_arm base image might be helpful)
+- §§iac;;s||D==2__0: confusing organization of py-files. maybe try to have code for each docker image in dedicated folder, currently src/app.py is for dashboard under iac/dashboard and src/measure.py is for the sensor under iac/app!
 * dashboard
 - §§dashboard;;f: shows humidity and temperature in one plot with 2 y-axes
+- §§dashboard;;f: loads data from /data folder on the host system mounted to /data
 ** shortcomings
 - None
 * core logic
-- §§core;;f: Within development fake sensor and pushbulletk
+- §§core;;f: Within development fake sensor and pushbullet
+- §§core;;f: Sends pushbullet message when threshold is exceeded but only between 8 and 22 o'clock and if the last notification is was at least 30 before
+- §§core;;f: writes measurements to /data folder on the host system mounted to /data
 - §§core;;f: Log to /tmp/monitor.log in the docker container
 ** shortcomings
-- §§core;;s||C==2__0: logs accessible outside docker container
+- §§core;;s||B==2__0: logs accessible outside docker container
 - §§core;;s||D==2__0: script needs arguments for humidity threshold and time between two notifications
-* documentation
-** shortcomings
-- §§docu;;s||D==3__0: docstrings
+- §§core;;s||D==2__0: pushbullet msg once a day to see that the monitor is still running
 

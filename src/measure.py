@@ -14,14 +14,29 @@ logging.basicConfig(filename="/tmp/monitor.log", level=logging.INFO)
 
 
 def is_development():
+    """
+    Returns true if the app is running in development mode
+    """
     return os.getenv("DEVELOPMENT") is not None
 
 
 class Notification:
+    """
+    Class for sending notifications
+    """
+
     def __init__(self) -> None:
+        """
+        Constructor
+        """
         logger.info("Init Notification")
 
     def send(self, title: str, body: str):
+        """
+        Send a notification
+        :param title: Title of the notification
+        :param body: Body of the notification
+        """
         # https://gist.github.com/mixsoda/4d7eebdf767432f95f4b66ac19f7e310
         token = os.environ["PUSHBULLET_TOKEN"]
         url = "https://api.pushbullet.com/v2/pushes"
@@ -36,6 +51,10 @@ class Notification:
 
 
 class NotificationDummy:
+    """
+    During development, we want to send notifications to stdout
+    """
+
     def __init__(self) -> None:
         logger.info("Init NotificationDummy")
 
@@ -44,7 +63,14 @@ class NotificationDummy:
 
 
 class Sensor:
+    """
+    Class for reading the temperature and humidity
+    """
+
     def __init__(self) -> None:
+        """
+        Constructor initializing the Sensor
+        """
         logger.info("Init Sensor")
         import Adafruit_DHT
 
@@ -52,6 +78,10 @@ class Sensor:
         self.pin = 4
 
     def get_measurements(self) -> dict:
+        """
+        Measure the temperature and humidity. Since the sensor can be unreliable
+        we loop until we get a measurement sleeping each time for 1 second.
+        """
         import Adafruit_DHT
 
         meas_avail = False
@@ -70,10 +100,21 @@ class Sensor:
 
 
 class SensorDummy:
+    """
+    During development the real sensor is not available and we want to simulate
+    measurements.
+    """
+
     def __init__(self) -> None:
+        """
+        Constructor
+        """
         logger.info("Init SensorDummy")
 
     def get_measurements(self) -> dict:
+        """
+        Make up measurements
+        """
         from random import randrange
 
         return dict(
@@ -84,7 +125,18 @@ class SensorDummy:
 
 
 class Alert:
+    """
+    Class that monitors humidity and sends a notification if humidity is too high.
+    In order to not get spammed with notifications we only send one every 30 minutes.
+    Also we only send notifications between 8 and 22 o'clock.
+    """
+
     def __init__(self, sender: Notification) -> None:
+        """
+        Constructor
+
+        :param sender: Notification class used to send notifications
+        """
         logger.info("Init Alert")
         self.threshold = 70
         self.min_elapsed_time = 1 if is_development() else 30 * 60
@@ -97,6 +149,10 @@ class Alert:
         logger.info(f"{self.threshold=}, {self.min_elapsed_time=}, {self.sender=}")
 
     def check(self, value: float) -> None:
+        """
+        Logic to check and decide when to send a notification
+        :param value: Humidity measured by the sensor
+        """
         hour = int(datetime.now().strftime("%H"))
         if hour < 8 or 22 < hour:
             return
@@ -109,12 +165,19 @@ class Alert:
 
 
 def write_meas(m):
+    """
+    export measurements to data/meas.jsonl
+    :param m: list of dicts
+    """
     with open("data/meas.jsonl", "a") as fh:
         json.dump(m, fh)
         fh.write("\n")
 
 
 def main():
+    """
+    Orchestrate logic to send notifications if humidity is too high via pushbullet
+    """
     sender = NotificationDummy() if is_development() else Notification()
     alert_system = Alert(sender=sender)
     sensor = SensorDummy() if is_development() else Sensor()
