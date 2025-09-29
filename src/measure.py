@@ -164,6 +164,38 @@ class Alert:
             self.last_alert = datetime.now()
 
 
+class DailyPing:
+    """
+    Send a notification once a day to verify that notification it self still works
+    """
+
+    def __init__(self, sender: Notification) -> None:
+        """
+        Constructor
+
+        :param sender: Notification class used to send notifications
+        """
+        logger.info("Init DailyPing")
+        self.min_elapsed_time = 1 if is_development() else 30 * 60
+        self.sender = sender
+        self.send_today = False
+
+    def check(self) -> None:
+        """
+        Logic to check and decide when to send a notification
+        """
+        hour = int(datetime.now().strftime("%H"))
+        if hour != 20:
+            self.send_today = False
+            return
+
+        if self.send_today:
+            return
+
+        self.sender.send(title="Daily ping", body=f"check if sending is possible")
+        self.send_today = True
+
+
 def write_meas(m):
     """
     export measurements to data/meas.jsonl
@@ -180,16 +212,17 @@ def main():
     """
     sender = NotificationDummy() if is_development() else Notification()
     alert_system = Alert(sender=sender)
+    daily_ping_system = DailyPing(sender=sender)
     sensor = SensorDummy() if is_development() else Sensor()
     WAIT = 1 if is_development() else 60
     measurements = []
 
     while True:
-        # pd.DataFrame(measurements).to_json("data/meas.jsonl", lines=True, orient="records")
         meas = sensor.get_measurements()
         measurements.append(meas)
         write_meas(m=meas)
         alert_system.check(value=meas["humidity"])
+        daily_ping_system.check()
 
         time.sleep(WAIT)
 

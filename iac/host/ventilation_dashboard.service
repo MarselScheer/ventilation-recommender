@@ -1,0 +1,9 @@
+[Unit]
+Description=Start ventilation dashboard
+
+[Service]
+Type=simple
+ExecStart=docker run --privileged --rm -d -v /data:/data -p 8000:8000 marselscheer/ventilation-dashboard:20240926
+
+[Install]
+WantedBy=multi-user.target
