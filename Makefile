@@ -52,6 +52,10 @@ venv:
 	source venv/bin/activate
 	pip install shiny==1.1.0 matplotlib==3.2.9
 
+run-app:
+	@echo -------------------- $@ $$(date) --------------------
+	python src/measure.py
+
 run-dashboard-in-dev-mode: venv
 	@echo -------------------- $@ $$(date) --------------------
 	source venv/bin/activate
